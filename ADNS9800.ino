@@ -1,9 +1,5 @@
-
 // ADNS-9500 
 // datasheet AV02-1727EN.pdf : http://avagotech.com/docs/AV02-1726EN
-// Licence : 
-// 09/10/2010
-// by Nicolas SAUGNIER aka Xevel
 
 // The power-up sequence is ok, I have not tried and fancy stuff like reading the movements...
 
@@ -184,7 +180,7 @@ void setup(){
   // start the SPI library:
   SPI.begin(); // sets up pins 10, 11, 12 and 13
 
-  // set the details of the communication
+  // set the details of the communication, this is pretty weird
   SPI.setBitOrder(MSBFIRST); // transimission of the bits : b7 b6 b5 ... b0 
   SPI.setDataMode(SPI_MODE3); // sampling on rising edge(CPHA=1), and leading edge is setup(=set the value) (CPOL=1)
   SPI.setClockDivider(SPI_CLOCK_DIV8); // 16MHz/8 = 2MHz = the max clock speed of the ADNS, and it works great
@@ -220,14 +216,15 @@ void setup(){
 }
 
 void loop(){
-  delay(1);
+  
+  delay(1); // this might need more delay
   
   Serial.print("Motion = ");
   Serial.println(digitalRead(PIN_MOTION),HEX);
   
   byte motion = adns_read_reg(REG_Motion);
-  int delta_x = (int)adns_read_reg(REG_Delta_X_L) | ((int)adns_read_reg(REG_Delta_X_H)<<8);
-  int delta_y = (int)adns_read_reg(REG_Delta_Y_L) | ((int)adns_read_reg(REG_Delta_Y_H)<<8);
+  int delta_x = (int) adns_read_reg(REG_Delta_X_L) | ((int) adns_read_reg(REG_Delta_X_H)<<8);
+  int delta_y = (int) adns_read_reg(REG_Delta_Y_L) | ((int) adns_read_reg(REG_Delta_Y_H)<<8);
   
   Serial.print(motion,HEX);
   Serial.print("x=");
